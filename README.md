@@ -23,6 +23,12 @@ the sensor.
 Refer to the schematic for connections and for part numbers that I used (also
 see below). The cuvette holder was 3d printed, the 3d model is available.
 
+<img width="1496" height="840" alt="shield_schematic" src="https://github.com/user-attachments/assets/14cae6d0-0188-45b4-8bf7-49f29e9427bc" />
+
+<img width="1064" height="722" alt="shield_layout" src="https://github.com/user-attachments/assets/6a7c240b-edb2-42dd-8647-925a03d93173" />
+
+<img width="514" height="412" alt="shield_cuvette_holder" src="https://github.com/user-attachments/assets/3ce30682-7737-4427-b172-6110486a68bb" />
+
 #### Details on parts and wavelength choices
 
 I decided to work with infrared light (935 +/- 25) nm to limit interference
