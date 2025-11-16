@@ -176,8 +176,8 @@ float physical_full;
  * 6. New output values should match real absorbance, when taking scaling into
  *    account (see below).
  */
-constexpr float POWER_LAW_CORRECTOR_GAMMA = 0.666;
-constexpr float POWER_LAW_CORRECTOR_C = 1;
+constexpr float POWER_LAW_CORRECTOR_GAMMA = 1/0.7954917029592379;
+constexpr float POWER_LAW_CORRECTOR_C = 1/1.4531120264398234;
 
 /** Converts a raw physical sensor reading into calibrated absorbance. */
 float physical_to_A(const float physical_value) {
@@ -197,7 +197,7 @@ float physical_to_A(const float physical_value) {
 /** Maximum expected absorbance value.
  * Used only for scaling sensor outputs to byte values (0-255).
  */
-constexpr float MAX_A = 2;
+constexpr float MAX_A = 2.5;
 
 /** Conversion factor from absorbance to byte-scale (0-255). */
 constexpr float to_byte = UINT8_MAX / MAX_A;
