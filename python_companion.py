@@ -145,7 +145,7 @@ T_AXIS = DT * np.arange(values.shape[0])
 """ Pause state flag. """
 PAUSED = False
 
-def toggle_pause():
+def toggle_pause(_):
     """Toggle the paused state.
     Triggered when the 'Pause' button is clicked).
     """
