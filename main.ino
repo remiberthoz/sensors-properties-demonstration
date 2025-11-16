@@ -182,7 +182,7 @@ constexpr float POWER_LAW_CORRECTOR_C = 1;
 /** Converts a raw physical sensor reading into calibrated absorbance. */
 float physical_to_A(const float physical_value) {
     const float A = pow(
-        max(0, log10f(physical_full / physical_value) / POWER_LAW_CORRECTOR_C),
+        max(0, log10((physical_full - physical_dark) / (physical_value - physical_dark)) * POWER_LAW_CORRECTOR_C),
         POWER_LAW_CORRECTOR_GAMMA
     );
     return A;
@@ -232,15 +232,30 @@ float uniform(float sigma) {
     return (((float) rand() / RAND_MAX) - 0.5) * sigma;
 }
 
-/** Reads multiple samples from the physical sensor and returns their average,
- * for noise reduction.
+/** See accumulate_read_physical_sensor(). */
+float accumulated_reads_value = 0;
+/** See accumulate_read_physical_sensor(). */
+int accumulated_reads_count = 0;
+
+/** Reads a sample from the physical sensor, increments the reading to
+ * accumulated_reads_value and increments accumulated_reads_count by one.
+ *
+ * Can be used to read multiplie values and perform averaging. Is intended to be
+ * used with get_and_reset_accumulated_reads().
  */
-float average_read_physical_sensor() {
-    constexpr int n_calib = min(256, __LONG_MAX__/UINT8_MAX);
-    float tmp = 0;
-    for (int i = 0; i < n_calib; i++)
-        tmp += read_physical_sensor();
-    return tmp / n_calib;
+void accumulate_read_physical_sensor() {
+    accumulated_reads_value += read_physical_sensor();
+    accumulated_reads_count += 1;
+}
+
+/** Returns the average of reads accumulated by accumulate_read_physical_sensor(),
+ * and resets the accumulation variables.
+ */
+float get_and_reset_accumulated_reads() {
+    const float result = accumulated_reads_value / accumulated_reads_count;
+    accumulated_reads_value = 0;
+    accumulated_reads_count = 0;
+    return result;
 }
 
 
@@ -391,23 +406,32 @@ void setup() {
     pinMode(PHYSICAL_OUTPUT_PIN, OUTPUT);
     randomSeed(analogRead(PHYSICAL_SENSOR_PIN));
 
-    // Adjust calibration for current environment (read dark and full light)
+    // Adjust calibration to environment (read *dark* and full light)
     digitalWrite(PHYSICAL_OUTPUT_PIN, 0);
-    physical_dark = average_read_physical_sensor();
+    for (int i = 0; i < 256; i++)
+        accumulate_read_physical_sensor();
+    physical_dark = get_and_reset_accumulated_reads();
+    
+    // Adjust calibration to environment (read dark and *full* light)
     digitalWrite(PHYSICAL_OUTPUT_PIN, 1);
-    physical_full = average_read_physical_sensor();
+    for (int i = 0; i < 256; i++)
+        accumulate_read_physical_sensor();
+    physical_full = get_and_reset_accumulated_reads();
 
     Serial.begin(115200);
     nextTick = millis();  // First loop will start immediately
 }
 
 void loop() {
+
+    // Accumulate sensor readings during sampling period
     if (millis() < nextTick)
-        return;
+        accumulate_read_physical_sensor();
+
     nextTick += simulation_dt_ms;
 
-    // Convert raw reading to absorbance
-    const float real_A = physical_to_A(read_physical_sensor());
+    // Convert averaged raw readings to absorbance
+    const float real_A = physical_to_A(get_and_reset_accumulated_reads());
 
     // Send calibrated absorbance reading, if enabled
     if (OUTPUT_CALIBRATED_A) {
