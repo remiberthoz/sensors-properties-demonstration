@@ -8,6 +8,18 @@ The program visualizes the behavior of these simulated sensors in real-time,
 allowing for a hands-on, inexpensive way to discover these concepts.
 
 
+## Problems to fix / todo list...
+
+- The calibration procedure is not OK, it should somehow take the value of
+  MAX_A into account ; and likely the complete scaling (with to_byte).
+
+- Try to output sensor values on DAC such that the students can work on an
+  oscilloscope. Check if the DAC communication rate is good enough to
+  simulate real analog.
+
+- Program Arduino IO to read jumper status, and potentially allow students to
+  change easily configuration.
+
 ## TECHNICAL REQUIREMENTS
 
 ### Hardware
