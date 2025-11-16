@@ -427,8 +427,10 @@ void loop() {
     // Accumulate sensor readings during sampling period
     // TODO: this effectively reduces response time of all sensors, check if it
     // is a problem
-    if (millis() < nextTick)
+    if (millis() < nextTick) {
         accumulate_read_physical_sensor();
+        return;
+    }
 
     nextTick += simulation_dt_ms;
 
