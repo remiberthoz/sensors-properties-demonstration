@@ -152,12 +152,6 @@ def toggle_pause(_):
     global PAUSED
     PAUSED = not PAUSED
 
-# class Listener:
-#     def __init__(self):
-#         self.paused = False
-#     def pause(self, event):
-#         self.paused = not self.paused
-
 # Create main figure and axis
 fig, ax = plt.subplots(1, figsize=(16, 8))
 
@@ -165,8 +159,6 @@ fig, ax = plt.subplots(1, figsize=(16, 8))
 ax_pause = fig.add_axes([0.80, 0.01, 0.05, 0.05])
 btn_pause = widgets.Button(ax_pause, "Pause")
 btn_pause.on_clicked(toggle_pause)
-# listener = Listener()
-# btn_pause.on_clicked(listener.pause)
 
 # Initialize one line per sensor
 lines = ax.plot(T_AXIS/1000, values,
