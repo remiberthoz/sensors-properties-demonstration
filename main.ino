@@ -425,8 +425,10 @@ void setup() {
 void loop() {
 
     // Accumulate sensor readings during sampling period
-    if (millis() < nextTick)
+    if (millis() < nextTick) {
         accumulate_read_physical_sensor();
+        return;
+    }
 
     nextTick += simulation_dt_ms;
 
