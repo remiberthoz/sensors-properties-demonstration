@@ -48,7 +48,7 @@ Typical values:
 SERIAL_PORT = "/dev/ttyACM0"
 
 """ Baud rate. Must match the value defined in the Arduino program."""
-BAUD_RATE = 115200
+BAUD_RATE = 9600
 
 """ Serial communication channel handle."""
 ser = serial.Serial(SERIAL_PORT, BAUD_RATE)

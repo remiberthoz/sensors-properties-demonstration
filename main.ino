@@ -418,7 +418,7 @@ void setup() {
         accumulate_read_physical_sensor();
     physical_full = get_and_reset_accumulated_reads();
 
-    Serial.begin(115200);
+    Serial.begin(9600);
     nextTick = millis();  // First loop will start immediately
 }
 

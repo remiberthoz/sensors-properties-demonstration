@@ -13,9 +13,6 @@ allowing for a hands-on, inexpensive way to discover these concepts.
 - The calibration procedure is not OK, it should somehow take the value of
   MAX_A into account ; and likely the complete scaling (with to_byte).
 
-- Lower the Baud rate to make the transmission more robust with poor-quality
-  USB cables.
-
 - Try to output sensor values on DAC such that the students can work on an
   oscilloscope. Check if the DAC communication rate is good enough to
   simulate real analog.
